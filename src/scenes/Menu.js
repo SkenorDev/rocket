@@ -28,7 +28,7 @@ class Menu extends Phaser.Scene {
 })
       let menuConfig={
         fontFamily:'Courier',
-        fontSize:'28px',
+        fontSize:'24px',
         backgroundColor:'#F3B141',
         color: '#843605',
         align: 'right',
@@ -36,29 +36,39 @@ class Menu extends Phaser.Scene {
             top:5,
             bottom:5,
         },
-            fixedWidth:100
+            fixedWidth:0
             
         }
         
         this.add.text(game.config.width/2, game.config.height/2 -borderUISize-borderPadding, 'ROCKET PATROL',menuConfig).setOrigin(0.5)
+       // this.add.text(game.config.width/2/game.config.height/2 + borderUISize+ borderPadding, 'ROCKET PATROL',menuConfig).setOrigin(0.5)
     
         this.add.text(game.config.width/2, game.config.height/2,'Use arrow keys to move (f) to fire',menuConfig).setOrigin(0.5)
-        menuConfig.backgroundColor='00FF00'
+        menuConfig.backgroundColor='#00FF00'
         menuConfig.color='#000'
-        this.add.text(game.config.width/2/game.config.height/2 + borderUISize+ borderPadding, 'Press left arrow for novice or right arrow for Expert',menuConfig).setOrigin(0.5)
+        this.add.text(game.config.width/2,game.config.height/2 + borderUISize+ borderPadding, 'Press L for Novice R for hard',menuConfig).setOrigin(0.5)
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
-keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
+        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
+        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)
+        keyRESET = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
       }
+
+
       update() {
           // check key input for restart
   if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyRESET)) {
     this.scene.restart()
+    console.log("R");
+}
+if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+  this.scene.start("menuScene")
+  console.log("R");
 }
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
           // easy mode
           game.settings = {
             spaceshipSpeed: 3,
-            gameTimer: 60000    
+            gameTimer: 15000 
           }
           this.sound.play('sfx-select')
           this.scene.start('playScene')    
@@ -67,11 +77,15 @@ keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
           // hard mode
           game.settings = {
             spaceshipSpeed: 4,
-            gameTimer: 45000    
+            gameTimer:15000  
           }
           this.sound.play('sfx-select')
           this.scene.start('playScene')    
         }
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+          this.scene.start("menuScene")
+        }
       }
+      
     }
   

@@ -28,13 +28,14 @@ let scoreConfig = {
     fontSize: '28px',
     backgroundColor: '#F3B141',
     color: '#843605',
-    align: 'middle',
+    align: 'right',
     padding: {
-      top: 5,
-      bottom: 5,
+      top: 3,
+      bottom: 3,
     },
     fixedWidth: 100
   }
+  this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig)
 // GAME OVER flag
 this.gameOver = false
 
@@ -42,7 +43,7 @@ this.gameOver = false
 scoreConfig.fixedWidth = 0
 this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
     this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5)
-    this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5)
+    this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press right or (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5)
     this.gameOver = true
 }, null, this)
 
@@ -51,6 +52,12 @@ this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyRESET)) {
             this.scene.restart()
         }
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+          this.scene.start("menuScene")
+        }
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
+          this.scene.restart()
+        }
         this.starfield.tilePositionX -= 4
         if(!this.gameOver) {               
             this.p1Rocket.update()         // update rocket sprite
@@ -58,29 +65,21 @@ this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.ship02.update()
             this.ship03.update()
         } 
-        if(this.checkCollision(this.p1Rocket, this.ship03)) {
+       
+          if(this.checkCollision(this.p1Rocket, this.ship03)) {
             this.p1Rocket.reset()
+            this.shipExplode(this.ship03)  
             this.ship03.reset()
           }
           if (this.checkCollision(this.p1Rocket, this.ship02)) {
             this.p1Rocket.reset()
-            this.ship02.reset()
-          }
-          if (this.checkCollision(this.p1Rocket, this.ship01)) {
-            this.ship01.reset()
-            this.p1Rocket.reset()
-          }
-          if(this.checkCollision(this.p1Rocket, this.ship03)) {
-            this.p1Rocket.reset()
-            this.shipExplode(this.ship03)   
-          }
-          if (this.checkCollision(this.p1Rocket, this.ship02)) {
-            this.p1Rocket.reset()
             this.shipExplode(this.ship02)
+            this.ship02.reset()
           }
           if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset()
             this.shipExplode(this.ship01)
+            this.ship01.reset()
           }
           if(!this.gameOver) {               
             this.p1Rocket.update()         // update rocket sprite
